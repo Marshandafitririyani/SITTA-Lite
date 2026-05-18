@@ -1,0 +1,220 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap");
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --primary-blue: #0052a2;
+  --bg-body: #f4f7fa;
+  --white: #ffffff;
+  --in-color: #27ae60;
+  --out-color: #e67e22;
+}
+
+body {
+  font-family: "Inter", sans-serif;
+  background-color: var(--bg-body);
+}
+
+/* NAVBAR  */
+.navbar {
+  background-color: var(--primary-blue);
+  color: white;
+  padding: 15px 25px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.logo-section {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+.logo-section img {
+  width: 50px;
+  background: white;
+  padding: 5px;
+  border-radius: 8px;
+}
+.logo-text h1 {
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 1.2;
+}
+.logo-text h2 {
+  font-size: 24px;
+  font-weight: 800;
+  line-height: 1;
+  margin-bottom: 4px;
+}
+.logo-text p {
+  font-size: 11px;
+  opacity: 0.9;
+}
+
+/* CONTAINER */
+.container {
+  width: 100%;
+  padding: 25px;
+}
+
+.header-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+}
+
+.search-bar {
+  background: white;
+  padding: 8px 15px;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.search-bar input {
+  border: none;
+  outline: none;
+  font-size: 14px;
+  width: 200px;
+}
+
+/* CHART BOX (Grafik Interaktif) */
+.chart-box {
+  background: white;
+  padding: 25px;
+  border-radius: 15px;
+  margin-bottom: 30px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+}
+
+.chart-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 30px;
+}
+
+.simple-bar-chart {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  height: 200px;
+  padding: 0 20px;
+  border-bottom: 2px solid #eee;
+}
+
+.bar-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 10%;
+}
+
+.bar {
+  width: 100%;
+  background: linear-gradient(to top, var(--primary-blue), #3498db);
+  border-radius: 8px 8px 0 0;
+  position: relative;
+  transition: 0.3s;
+  cursor: pointer;
+}
+
+.bar:hover {
+  filter: brightness(1.2);
+}
+
+.bar span {
+  position: absolute;
+  top: -25px;
+  font-size: 11px;
+  font-weight: bold;
+  color: var(--primary-blue);
+}
+
+.day {
+  font-size: 12px;
+  color: #7f8c8d;
+  margin-top: 10px;
+}
+
+/* TRANSACTION LIST */
+.transaction-list {
+  background: white;
+  padding: 20px;
+  border-radius: 15px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+}
+
+.table-info {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.monitoring-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.monitoring-table th {
+  text-align: left;
+  padding: 15px;
+  background: #f8f9fa;
+  color: var(--primary-blue);
+  font-size: 13px;
+}
+
+.monitoring-table td {
+  padding: 15px;
+  border-bottom: 1px solid #f1f1f1;
+  font-size: 14px;
+}
+
+/* BADGES */
+.id-tag {
+  color: var(--primary-blue);
+  font-family: monospace;
+  font-weight: bold;
+}
+.type-badge {
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: bold;
+  color: white;
+}
+.type-badge.in {
+  background-color: var(--in-color);
+}
+.type-badge.out {
+  background-color: var(--out-color);
+}
+
+.btn-icon {
+  border: none;
+  background: #f0f2f5;
+  padding: 8px;
+  border-radius: 5px;
+  cursor: pointer;
+  color: #555;
+}
+
+.btn-icon:hover {
+  background: var(--primary-blue);
+  color: white;
+}
+
+.text-small {
+  font-size: 12px;
+  color: #7f8c8d;
+}

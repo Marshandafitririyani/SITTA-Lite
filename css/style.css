@@ -1,0 +1,183 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+}
+
+body {
+  background-image:
+    linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)),
+    url("../assets/gedung_univ_new.jpg");
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.login-card {
+  width: 100%;
+  max-width: 380px;
+  background: white;
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+}
+
+.login-container {
+  width: 100%;
+  max-width: 400px;
+  padding: 20px;
+}
+
+.login-card {
+  background: #ffffff;
+  padding: 40px 30px;
+  border-radius: 8px;
+  border: 1px solid #e0e0e0;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  text-align: center;
+}
+
+.logo {
+  width: 120px;
+  margin-bottom: 15px;
+}
+
+h1 {
+  font-size: 18px;
+  color: #000;
+  font-weight: 700;
+  margin-bottom: 3px;
+}
+
+h2 {
+  font-size: 16px;
+  color: #05468c;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  margin-bottom: 5px;
+}
+
+h3 {
+  font-size: 16px;
+  color: #000000;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  margin-bottom: 15px;
+}
+
+.input-group {
+  text-align: left;
+  margin-bottom: 20px;
+}
+
+.input-group label {
+  display: block;
+  font-size: 14px;
+  margin-bottom: 8px;
+}
+
+.input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.input-wrapper i {
+  position: absolute;
+  left: 15px;
+  color: #0056b3;
+  font-size: 18px;
+  z-index: 2;
+}
+
+.input-wrapper input {
+  width: 100%;
+  padding: 12px 15px 12px 45px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  outline: none;
+  transition: 0.3s;
+}
+
+.input-wrapper input:focus {
+  border-color: #0a70d5;
+  box-shadow: 0 0 5px rgba(0, 86, 179, 0.2);
+}
+
+.input-wrapper input:focus {
+  border-color: #0056b3;
+}
+
+.forgot-password {
+  text-align: right;
+  margin-bottom: 25px;
+}
+
+.forgot-password a {
+  text-decoration: none;
+  color: #3498db;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.btn-login {
+  width: 100%;
+  padding: 14px;
+  background-color: #0056b3;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.btn-login:hover {
+  background-color: #004494;
+}
+
+.footer {
+  margin-top: 25px;
+  font-size: 14px;
+  color: #333;
+}
+
+.footer a {
+  color: #3498db;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.footer a:hover {
+  text-decoration: underline;
+}
+
+.bar-btn {
+  flex: 1;
+  padding: 10px;
+  border: 1px solid #ccc;
+  background-color: white;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 13px;
+  font-family: "Poppins", sans-serif;
+  transition: 0.3s;
+  outline: none;
+}
+
+.bar-btn:hover {
+  background-color: #f0f0f0;
+}
+
+.bar-btn.active {
+  background-color: #0056b3 !important;
+  color: white !important;
+  border-color: #0056b3;
+  font-weight: bold;
+}

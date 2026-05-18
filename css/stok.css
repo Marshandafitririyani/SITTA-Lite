@@ -1,0 +1,402 @@
+/* ==========================================================================
+   GLOBAL VARIABLES & RESET
+   ========================================================================== */
+
+:root {
+  --primary-color: #0056b3;
+  --primary-dark: #003d82;
+  --primary-lite: #0056b3;
+  --success-color: #2ec4b6;
+  --warning-color: #ff9f1c;
+  --danger-color: #e71d36;
+  --bg-light: #f8f9fa;
+  --text-main: #2b2d42;
+  --border-radius: 12px;
+  --shadow-sm: 0 4px 6px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 8px 15px rgba(0, 0, 0, 0.08);
+}
+
+body,
+button,
+input,
+select,
+textarea {
+  font-family: "Inter", "Plus Jakarta Sans", sans-serif !important;
+}
+
+body {
+  background-color: var(--bg-light);
+  color: var(--text-main);
+  margin: 0;
+  padding: 0;
+}
+
+.container {
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 24px;
+  box-sizing: border-box;
+}
+
+/* ==========================================================================
+   NAVBAR HEADER COMPONENTS
+   ========================================================================== */
+.navbar {
+  background: var(--primary-color);
+  box-shadow: var(--shadow-sm);
+  padding: 15px 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 3px solid var(--primary-color);
+}
+
+.logo-section {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.logo-section img {
+  width: 45px;
+  height: 45px;
+  object-fit: contain;
+  background-color: white;
+  padding: 5px;
+  border-radius: 8px;
+}
+
+.logo-text h1 {
+  font-family: "Plus Jakarta Sans", sans-serif !important;
+  margin: 0;
+  font-size: 22px;
+  color: white;
+  font-weight: 800;
+  letter-spacing: 1px;
+}
+
+.logo-text h2 {
+  margin: 0;
+  font-size: 14px;
+  color: white;
+  font-weight: 600;
+}
+
+.logo-text p {
+  margin: 0;
+  font-size: 11px;
+  color: white;
+}
+
+.user-section {
+  font-size: 14px;
+  background: #eef1f6;
+  padding: 8px 16px;
+  border-radius: 30px;
+}
+
+.page-title {
+  font-family: "Plus Jakarta Sans", sans-serif !important;
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 20px;
+  color: var(--primary-dark);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* ==========================================================================
+   CRITICAL STOCK BANNER (Sesuai Layout Batas Konten Halaman)
+   ========================================================================== */
+.critical-stock-banner {
+  background: var(--danger-color);
+  color: white;
+  width: 100%;
+  box-sizing: border-box;
+  margin-bottom: 25px;
+  padding: 16px 24px;
+  border-radius: var(--border-radius);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 6px 15px rgba(231, 29, 54, 0.25);
+}
+
+.banner-left-side {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.icon-circle-warning {
+  background: rgba(255, 255, 255, 0.2);
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+}
+
+.alert-heading {
+  font-weight: 700;
+  font-size: 15px;
+  letter-spacing: 0.5px;
+}
+
+.alert-subtext {
+  font-size: 13px;
+  opacity: 0.9;
+}
+
+.btn-action-cek {
+  background: white;
+  color: var(--danger-color);
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: 0.2s;
+  font-size: 13px;
+}
+
+.btn-action-cek:hover {
+  background: #fff1f2;
+  transform: translateY(-1px);
+}
+
+/* ==========================================================================
+   CONTROL CARD (Filter & Sorter Dashboard)
+   ========================================================================== */
+.control-card {
+  background: white;
+  padding: 24px;
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow-sm);
+  margin-bottom: 25px;
+}
+
+.filter-grid-layout {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+  align-items: flex-end;
+}
+
+.form-control-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.form-control-group label {
+  font-size: 12px;
+  font-weight: 700;
+  color: #555;
+  text-transform: uppercase;
+}
+
+.custom-select-input {
+  padding: 10px 12px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: #fff;
+  font-size: 14px;
+  color: var(--text-main);
+  outline: none;
+  transition: all 0.2s;
+}
+
+.custom-select-input:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(0, 86, 179, 0.1);
+}
+
+.checkbox-trigger-box {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  background: #fff0f0;
+  border: 1px dashed var(--danger-color);
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--danger-color);
+}
+
+.checkbox-trigger-box input {
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+  accent-color: var(--danger-color);
+}
+
+.action-btn-row {
+  display: flex;
+  gap: 12px;
+  margin-top: 20px;
+  justify-content: flex-end;
+}
+
+.btn-secondary-outline {
+  background: none;
+  border: 1px solid #bbb;
+  padding: 10px 18px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  color: #555;
+  transition: 0.2s;
+}
+
+.btn-secondary-outline:hover {
+  background: #f1f3f5;
+  color: #212529;
+}
+
+.btn-primary-solid {
+  background: var(--primary-color);
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  color: white;
+  transition: 0.2s;
+}
+
+.btn-primary-solid:hover {
+  background: var(--primary-dark);
+}
+
+/* ==========================================================================
+   DATA TABLE DESIGN
+   ========================================================================== */
+.table-container {
+  background: white;
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+  border: 1px solid #eef1f6;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  font-size: 14px;
+}
+
+th {
+  font-family: "Plus Jakarta Sans", sans-serif !important;
+  background: var(--primary-color);
+  color: #ffffff;
+  font-weight: 700;
+  padding: 16px;
+  border-bottom: 2px solid #edf2f7;
+}
+
+td {
+  padding: 16px;
+  border-bottom: 1px solid #edf2f7;
+  vertical-align: middle;
+  color: #334155;
+}
+
+tr:hover td {
+  background-color: #f8fafc;
+}
+
+.row-aman:hover td {
+  background-color: #f0fdf4 !important;
+}
+
+.row-menipis {
+  background-color: #fffbeb !important;
+}
+
+.row-menipis:hover td {
+  background-color: #fef3c7 !important;
+}
+
+.row-kosong {
+  background-color: #fef2f2 !important;
+}
+
+.row-kosong:hover td {
+  background-color: #fee2e2 !important;
+}
+
+.book-preview-img {
+  width: 55px;
+  height: 75px;
+  object-fit: cover;
+  border-radius: 6px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+  background: #e2e8f0;
+}
+
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 30px;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.status-badge.aman {
+  background-color: #e6f9f6;
+  color: var(--success-color);
+}
+
+.status-badge.menipis {
+  background-color: #fff5e6;
+  color: var(--warning-color);
+}
+
+.status-badge.kosong {
+  background-color: #ffebeb;
+  color: var(--danger-color);
+}
+
+.action-flex-container {
+  display: flex;
+  gap: 8px;
+}
+
+.icon-action-btn {
+  border: none;
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.icon-action-btn.edit {
+  background-color: #ff9f1c;
+}
+
+.icon-action-btn.edit:hover {
+  background-color: #f28f00;
+}
+
+.icon-action-btn.delete {
+  background-color: var(--danger-color);
+}
+
+.icon-action-btn.delete:hover {
+  background-color: #c91227;
+}

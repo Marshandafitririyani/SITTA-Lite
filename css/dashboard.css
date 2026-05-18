@@ -1,0 +1,627 @@
+/* ==========================================================================
+   RESET & BASE STYLES
+   ========================================================================== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+:root {
+  --ut-blue: #0056b3;
+  --text-muted: #6b7280;
+}
+
+body {
+  background-color: #f4f7f9;
+  color: #333;
+  overflow-x: hidden; /* Mencegah scroll horizontal */
+}
+
+/* ==========================================================================
+   NAVBAR
+   ========================================================================== */
+.navbar {
+  background-color: var(--ut-blue);
+  color: white;
+  padding: 15px 30px; /* Jarak atas-bawah dan kanan-kiri navbar */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.logo-section {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  justify-content: flex-start;
+}
+
+.logo-section img {
+  width: 45px;
+  height: 45px;
+  object-fit: contain;
+  background-color: white;
+  padding: 5px;
+  border-radius: 8px;
+}
+
+.logo-text h1 {
+  font-size: 22px;
+  margin: 0;
+  line-height: 1;
+}
+
+.logo-text h2 {
+  font-size: 14px;
+  margin: 2px 0 0 0;
+  font-weight: 600;
+  opacity: 0.95;
+}
+
+.logo-text p {
+  font-size: 11px;
+  margin-top: 3px;
+  opacity: 0.85;
+}
+
+.user-section {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  font-size: 13px;
+}
+
+.btn-logout {
+  background: rgba(255, 255, 255, 0.2);
+  border: 1px solid white;
+  color: white;
+  padding: 6px 18px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: 0.3s;
+}
+
+.btn-logout:hover {
+  background: white;
+  color: var(--ut-blue);
+}
+
+/* ==========================================================================
+   LAYOUT CONTAINERS (Bungkus Konten)
+   ========================================================================== */
+.container {
+  width: 100%;
+  max-width: 1400px; /* Batas maksimal lebar agar di monitor ultra-wide tidak terlalu melar */
+  margin: 0 auto;
+  padding: 25px 30px; /* Jarak kanan-kiri diatur konstan 30px agar rapi */
+  box-sizing: border-box;
+}
+
+/* ==========================================================================
+   WELCOME BANNER
+   ========================================================================== */
+.welcome-banner {
+  background: white;
+  padding: 30px;
+  border-radius: 10px;
+  text-align: center;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  border-left: 5px solid #3f51b5;
+  margin-bottom: 25px;
+}
+
+.welcome-banner h2 {
+  color: #3f51b5;
+  margin-bottom: 5px;
+}
+
+.welcome-banner p {
+  color: #777;
+  font-size: 14px;
+}
+
+/* ==========================================================================
+   ROW TENGAH: GRID DATA MAHASISWA & LOG
+   ========================================================================== */
+.middle-grid-layout {
+  display: grid;
+  grid-template-columns: 1.1fr 1.9fr;
+  gap: 25px;
+  align-items: start;
+}
+
+.card-panel {
+  background: white;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+  padding: 25px;
+  min-height: 290px;
+  box-sizing: border-box;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+}
+
+.card-panel h4 {
+  margin: 0 0 20px 0;
+  font-size: 15px;
+  color: #111827;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Profil Bagian Kiri */
+.mahasiswa-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.user-meta-info {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 5px;
+}
+
+.avatar-circle-blue {
+  width: 55px;
+  height: 55px;
+  background: #3b82f6;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  color: white;
+  flex-shrink: 0;
+}
+
+.user-meta-info h5 {
+  margin: 0;
+  font-size: 16px;
+  color: #111827;
+  font-weight: 700;
+}
+
+.user-meta-info .mail {
+  color: var(--ut-blue);
+  font-size: 13px;
+  text-decoration: none;
+  display: inline-block;
+  margin-top: 2px;
+}
+
+.info-field-box {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.field-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.field-item label {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+}
+
+.field-item input,
+.field-item select {
+  padding: 8px 10px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 13px;
+  color: #1f2937;
+  background: #fff;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.btn-profile-trigger {
+  width: 100%;
+  background: var(--ut-blue);
+  color: white;
+  border: none;
+  padding: 10px;
+  border-radius: 6px;
+  font-weight: 600;
+  font-size: 13px;
+  cursor: pointer;
+  transition: 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.btn-profile-trigger:hover {
+  background: #004494;
+}
+
+/* Bagian Kanan: Live Log List */
+.right-content-flex {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.minimalist-time-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 5px 5px 15px 5px;
+  border-bottom: 1px dashed #e2e8f0;
+}
+
+.greet-text-side h3 {
+  margin: 0;
+  font-size: 24px;
+  font-weight: 800;
+  color: #0f172a;
+}
+
+.greet-text-side p {
+  margin: 6px 0 0 0;
+  font-size: 13px;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+.theme-indicator-box {
+  width: 40px;
+  height: 40px;
+  background: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  color: #475569;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+}
+
+.log-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.log-row-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  background: #f9fafb;
+  border-radius: 8px;
+  border: 1px solid #f3f4f6;
+}
+
+.log-arrow-box {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  background: white;
+  border: 1px solid #e5e7eb;
+}
+
+.arrow-orange {
+  color: #f97316;
+}
+.arrow-green {
+  color: #10b981;
+}
+
+.log-text-details {
+  flex-grow: 1;
+  margin-left: 12px;
+}
+
+.log-text-details h6 {
+  margin: 0;
+  font-size: 13px;
+  color: #1f2937;
+  font-weight: 600;
+}
+
+.log-text-details p {
+  margin: 2px 0 0 0;
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.log-status-right {
+  text-align: right;
+}
+
+.log-qty-val {
+  font-weight: 700;
+  font-size: 13px;
+}
+
+.qty-orange {
+  color: #f97316;
+}
+.qty-green {
+  color: #10b981;
+}
+
+.log-location-badge {
+  font-size: 9px;
+  background: #e5e7eb;
+  padding: 1px 5px;
+  border-radius: 4px;
+  color: #374151;
+  font-weight: 700;
+  display: inline-block;
+  margin-top: 2px;
+}
+
+/* ==========================================================================
+   CRITICAL STOCK BANNER (Meluas Penuh, Tanpa Jarak Kanan Kiri)
+   ========================================================================== */
+.critical-stock-banner {
+  background: #ff3b30;
+  color: white;
+  box-sizing: border-box;
+
+  /* Memberikan jarak atas-bawah yang ideal terhadap container */
+  margin-top: 20px;
+  padding: 12px 20px;
+  border-radius: 12px;
+  justify-content: space-between;
+
+  /* Menghilangkan radius agar benar-benar flat memotong layar */
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 4px 10px rgba(255, 59, 48, 0.15);
+}
+
+.banner-left-side {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.icon-circle-warning {
+  width: 32px;
+  height: 32px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+}
+
+.text-group-alert .alert-heading {
+  font-weight: 800;
+  font-size: 12px;
+  letter-spacing: 0.5px;
+}
+
+.text-group-alert .alert-subtext {
+  font-size: 12px;
+  opacity: 0.9;
+  margin-top: 1px;
+}
+
+.btn-action-cek {
+  background: white;
+  color: #ff3b30;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 11px;
+  cursor: pointer;
+  text-transform: uppercase;
+  transition: background 0.2s;
+}
+
+.btn-action-cek:hover {
+  background: #f3f4f6;
+}
+
+/* ==========================================================================
+   NAVIGASI GRID BAWAH
+   ========================================================================== */
+.bottom-navigation-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 25px;
+}
+
+.nav-card-box {
+  background: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  padding: 20px;
+  text-decoration: none;
+  color: inherit;
+  display: flex;
+  flex-direction: column;
+  height: 130px;
+  justify-content: space-between;
+  transition: all 0.2s;
+  box-sizing: border-box;
+}
+
+.nav-card-box:hover {
+  transform: translateY(-3px);
+  border-color: var(--ut-blue);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.05);
+}
+
+.card-top-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.icon-circle-indicator {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  color: white;
+}
+
+.color-blue {
+  background: #2563eb;
+}
+.color-green {
+  background: #10b981;
+}
+.color-magenta {
+  background: #db2777;
+}
+
+.badge-count {
+  font-size: 11px;
+  font-weight: 700;
+  color: #6b7280;
+  background: #f3f4f6;
+  padding: 2px 8px;
+  border-radius: 12px;
+}
+
+.card-bottom-row h5 {
+  margin: 0;
+  font-size: 15px;
+  color: #0f172a;
+  font-weight: 800;
+}
+
+.card-bottom-row p {
+  margin: 2px 0 0 0;
+  font-size: 12px;
+  color: #6b7280;
+}
+
+.card-footer-trigger {
+  font-size: 11px;
+  color: var(--ut-blue);
+  font-weight: 700;
+  text-transform: uppercase;
+  margin-top: 6px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* ==========================================================================
+   MENU GRID STRUKTUR DATA
+   ========================================================================== */
+.menu-grid {
+  display: grid;
+  margin-top: 25px;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 25px;
+}
+
+.card {
+  background: white;
+  padding: 30px 20px;
+  border-radius: 15px;
+  text-align: center;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+  transition: transform 0.3s;
+  border-top: 4px solid #3f51b5;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+}
+
+.card i {
+  font-size: 40px;
+  margin-bottom: 15px;
+  color: #091558;
+}
+
+.card h3 {
+  font-size: 18px;
+  margin-bottom: 10px;
+  color: #333;
+}
+
+.card p {
+  font-size: 13px;
+  color: #777;
+  margin-bottom: 20px;
+  min-height: 40px;
+}
+
+.btn-akses {
+  background-color: var(--ut-blue);
+  color: white;
+  border: none;
+  padding: 10px 0;
+  width: 80%;
+  border-radius: 25px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: opacity 0.3s;
+}
+
+.btn-akses:hover {
+  opacity: 0.9;
+}
+
+/* ==========================================================================
+   RESPONSIVE DESIGN (MEDIA QUERIES)
+   ========================================================================== */
+@media (max-width: 992px) {
+  .middle-grid-layout {
+    grid-template-columns: 1fr;
+  }
+  .bottom-navigation-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .navbar {
+    flex-direction: column;
+    text-align: center;
+    gap: 12px;
+    padding: 15px;
+  }
+  .logo-section {
+    flex-direction: column;
+    gap: 5px;
+  }
+  .container {
+    padding: 15px;
+  }
+  .critical-stock-banner {
+    padding: 14px 15px;
+    flex-direction: column;
+    gap: 10px;
+    text-align: center;
+  }
+}

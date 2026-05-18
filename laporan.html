@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Laporan Bahan Ajar - SITTA UT</title>
+    <link rel="stylesheet" href="css/laporan.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    />
+  </head>
+  <body>
+    <header class="navbar">
+      <div class="logo-section">
+        <img src="assets/logo_univ.jpeg" alt="Logo UT" />
+        <div class="logo-text">
+          <h1>SITTA</h1>
+          <h2>UNIVERSITAS TERBUKA</h2>
+          <p>Sistem Informasi Tugas Tutorial dan Administrasi</p>
+        </div>
+      </div>
+    </header>
+
+    <div class="container">
+      <header class="report-header">
+        <div class="title-area">
+          <h2><i class="fas fa-file-invoice"></i> Laporan Rekapitulasi</h2>
+          <p>Periode: Mei 2024</p>
+        </div>
+        <div class="action-area">
+          <button class="btn-export pdf">
+            <i class="fas fa-file-pdf"></i> Export PDF
+          </button>
+          <button class="btn-export excel">
+            <i class="fas fa-file-excel"></i> Export Excel
+          </button>
+        </div>
+      </header>
+
+      <div class="stat-grid">
+        <div class="card-stat blue">
+          <div class="icon"><i class="fas fa-book"></i></div>
+          <div class="data">
+            <h3>12,450</h3>
+            <p>Total Buku Keluar</p>
+          </div>
+        </div>
+        <div class="card-stat green">
+          <div class="icon"><i class="fas fa-truck-loading"></i></div>
+          <div class="data">
+            <h3>850</h3>
+            <p>DO Terselesaikan</p>
+          </div>
+        </div>
+        <div class="card-stat orange">
+          <div class="icon"><i class="fas fa-exclamation-triangle"></i></div>
+          <div class="data">
+            <h3>14</h3>
+            <p>Laporan Retur</p>
+          </div>
+        </div>
+        <div class="card-stat purple">
+          <div class="icon"><i class="fas fa-box"></i></div>
+          <div class="data">
+            <h3>5,200</h3>
+            <p>Sisa Stok Gudang</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="report-content">
+        <div class="table-header">
+          <h3>Rincian Pengiriman Per UPBJJ</h3>
+          <div class="filter-box">
+            <input type="month" value="2024-05" />
+          </div>
+        </div>
+        <table class="report-table">
+          <thead>
+            <tr>
+              <th>Kode UPBJJ</th>
+              <th>Nama Wilayah</th>
+              <th>Jumlah Buku</th>
+              <th>Total DO</th>
+              <th>Status Laporan</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>021</strong></td>
+              <td>UPBJJ Semarang</td>
+              <td>1,200 Eks</td>
+              <td>45</td>
+              <td><span class="lbl-verified">Terverifikasi</span></td>
+            </tr>
+            <tr>
+              <td><strong>020</strong></td>
+              <td>UPBJJ Jakarta</td>
+              <td>3,450 Eks</td>
+              <td>112</td>
+              <td><span class="lbl-verified">Terverifikasi</span></td>
+            </tr>
+            <tr>
+              <td><strong>015</strong></td>
+              <td>UPBJJ Medan</td>
+              <td>950 Eks</td>
+              <td>28</td>
+              <td><span class="lbl-pending">Menunggu</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </body>
+</html>

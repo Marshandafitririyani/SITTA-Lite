@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Monitoring Progress DO - SITTA UT</title>
+    <link rel="stylesheet" href="css/monitoring.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    />
+  </head>
+  <body>
+    <header class="navbar">
+      <div class="logo-section">
+        <img src="assets/logo_univ.jpeg" alt="Logo UT" />
+        <div class="logo-text">
+          <h1>SITTA</h1>
+          <h2>UNIVERSITAS TERBUKA</h2>
+          <p>Sistem Informasi Tugas Tutorial dan Administrasi</p>
+        </div>
+      </div>
+    </header>
+
+    <div class="container">
+      <header class="header-section">
+        <div class="title-group">
+          <h1><i class="fas fa-chart-line"></i> Monitoring Progress DO</h1>
+          <p>Pantau real-time pengiriman bahan ajar ke UPBJJ</p>
+        </div>
+        <div class="header-actions">
+          <div class="search-box">
+            <i class="fas fa-search"></i>
+            <input type="text" placeholder="Cari No. DO atau Tujuan..." />
+          </div>
+          <button class="btn-refresh">
+            <i class="fas fa-sync-alt"></i> Refresh Data
+          </button>
+        </div>
+      </header>
+
+      <div class="filter-container">
+        <button class="filter-btn active">Semua (45)</button>
+        <button class="filter-btn">Packing (12)</button>
+        <button class="filter-btn">In Transit (20)</button>
+        <button class="filter-btn">Diterima (13)</button>
+      </div>
+
+      <div class="table-container">
+        <table class="monitoring-table">
+          <thead>
+            <tr>
+              <th>ID Transaksi</th>
+              <th>UPBJJ Tujuan</th>
+              <th>Waktu Update</th>
+              <th>Progress</th>
+              <th>Status</th>
+              <th>Aksi</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>DO-2024-0081</strong></td>
+              <td>
+                <div class="dest">
+                  <span>UPBJJ Semarang</span>
+                  <small>Kurir: Indah Cargo</small>
+                </div>
+              </td>
+              <td>Hari ini, 10:30</td>
+              <td>
+                <div class="progress-wrapper">
+                  <div class="progress-bar">
+                    <div class="progress-fill" style="width: 75%"></div>
+                  </div>
+                  <span class="percent">75%</span>
+                </div>
+              </td>
+              <td><span class="badge badge-transit">In Transit</span></td>
+              <td><button class="btn-detail">Detail</button></td>
+            </tr>
+
+            <tr>
+              <td><strong>DO-2024-0079</strong></td>
+              <td>
+                <div class="dest">
+                  <span>UPBJJ Jakarta</span>
+                  <small>Kurir: Self Pickup</small>
+                </div>
+              </td>
+              <td>Kemarin, 16:15</td>
+              <td>
+                <div class="progress-wrapper">
+                  <div class="progress-bar">
+                    <div
+                      class="progress-fill finished"
+                      style="width: 100%"
+                    ></div>
+                  </div>
+                  <span class="percent">100%</span>
+                </div>
+              </td>
+              <td><span class="badge badge-success">Selesai</span></td>
+              <td><button class="btn-detail">Detail</button></td>
+            </tr>
+            <tr>
+              <td><strong>DO-2024-0085</strong></td>
+              <td>
+                <div class="dest">
+                  <span>UPBJJ Medan</span>
+                  <small>Kurir: JNE Logistik</small>
+                </div>
+              </td>
+              <td>Baru Saja</td>
+              <td>
+                <div class="progress-wrapper">
+                  <div class="progress-bar">
+                    <div class="progress-fill packing" style="width: 25%"></div>
+                  </div>
+                  <span class="percent">25%</span>
+                </div>
+              </td>
+              <td><span class="badge badge-warning">Packing</span></td>
+              <td><button class="btn-detail">Detail</button></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </body>
+</html>

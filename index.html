@@ -1,0 +1,231 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login SISTEM SITTA</title>
+    <link rel="stylesheet" href="css/style.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  </head>
+
+  <body>
+    <div class="login-container">
+      <div class="login-card">
+        <div class="header">
+          <img src="assets/logo_univ.jpeg" alt="Logo UT" class="logo" />
+          <h1>LOGIN</h1>
+          <h2>UNIVERSITAS TERBUKA</h2>
+          <h3>Selamat datang di SITTA</h3>
+        </div>
+
+        <form id="loginForm">
+          <div class="input-group">
+            <label>Email</label>
+            <div class="input-wrapper">
+              <i class="fas fa-envelope"></i>
+              <input
+                type="email"
+                id="email"
+                placeholder="Masukkan email"
+                required
+              />
+            </div>
+          </div>
+
+          <div class="input-group">
+            <label>Password</label>
+            <div class="input-wrapper">
+              <i class="fas fa-lock"></i>
+              <input
+                type="password"
+                id="password"
+                placeholder="Masukkan password"
+                required
+              />
+            </div>
+          </div>
+
+          <div class="forgot-password">
+            <a href="#" onclick="alertLupaPassword()">Lupa password?</a>
+          </div>
+
+          <button type="button" class="btn-login" onclick="handleLogin()">
+            Masuk
+          </button>
+        </form>
+
+        <div class="footer">
+          <p>
+            Belum punya akun?
+            <a href="#" onclick="showRegisterForm()">Daftar disini</a>
+          </p>
+        </div>
+        <p>versi 2.0</p>
+      </div>
+    </div>
+
+    <script src="js/data.js"></script>
+
+    <script>
+      function handleLogin() {
+        const emailInput = document.getElementById("email").value;
+        const passInput = document.getElementById("password").value;
+
+        if (emailInput === "" || passInput === "") {
+          Swal.fire(
+            "Opps!",
+            "Email dan Password tidak boleh kosong",
+            "warning",
+          );
+          return;
+        }
+
+        let semuaUser = [...dataPengguna];
+
+        const dataBaru =
+          JSON.parse(localStorage.getItem("users_tambahan")) || [];
+
+        semuaUser = semuaUser.concat(dataBaru);
+
+        const user = semuaUser.find(
+          (u) => u.email === emailInput && u.password === passInput,
+        );
+
+        if (user) {
+          Swal.fire({
+            title: "Login Berhasil!",
+            text: `Selamat datang, ${user.nama}`,
+            icon: "success",
+            timer: 1500,
+            showConfirmButton: false,
+          }).then(() => {
+            localStorage.setItem("userLoggedIn", JSON.stringify(user));
+            window.location.href = "dashboard.html";
+          });
+        } else {
+          Swal.fire(
+            "Gagal!",
+            "Email atau Password salah atau akun belum terdaftar",
+            "error",
+          );
+        }
+      }
+      function alertLupaPassword() {
+        Swal.fire({
+          title: "Lupa Password?",
+          text: "Silakan hubungi Admin melalui Unit IT Universitas Terbuka untuk reset password Anda.",
+          icon: "question",
+          confirmButtonText: "Hubungi via WA",
+          cancelButtonText: "Batal",
+          showCancelButton: true,
+          confirmButtonColor: "#0056b3",
+        }).then((result) => {
+          if (result.isConfirmed) {
+            window.open("https://wa.me/6282143100927", "_blank");
+          }
+        });
+      }
+
+      function showRegisterForm() {
+        Swal.fire({
+          title: "",
+          showConfirmButton: false,
+          showCloseButton: true,
+          width: "450px",
+          padding: "1.5rem",
+          background: "#fff",
+          html: `
+            <div style="text-align: center; margin-bottom: 20px;">
+        <img src="assets/logo_univ.jpeg" alt="Logo UT" style="width: 70px; margin-bottom: 10px;">
+        <h4 style="font-weight: bold; color: #000; font-family: 'Poppins', sans-serif; font-size: 18px; line-height: 1.5;">
+            Registrasi SITTA <br> 
+        </h4>
+    </div>
+
+            <div style="text-align: left; font-family: 'Poppins', sans-serif;">
+                <label style="font-size: 13px; font-weight: 600;">Nama Lengkap</label>
+                <input type="text" id="reg-nama" class="swal2-input" placeholder="Masukkan nama" style="width: 100%; height: 40px; margin: 5px 0 12px 0; border-radius: 8px; font-size: 13px;">
+
+                <label style="font-size: 13px; font-weight: 600;">Email</label>
+                <input type="email" id="reg-email" class="swal2-input" placeholder="Masukkan email" style="width: 100%; height: 40px; margin: 5px 0 12px 0; border-radius: 8px; font-size: 13px;">
+
+                <label style="font-size: 13px; font-weight: 600;">Password</label>
+                <input type="password" id="reg-pass" class="swal2-input" placeholder="Masukkan password" style="width: 100%; height: 40px; margin: 5px 0 12px 0; border-radius: 8px; font-size: 13px;">
+
+                <label style="font-size: 13px; font-weight: 600;">Role</label>
+                <div id="role-bar" style="display: flex; gap: 10px; margin: 5px 0 12px 0;">
+                    <button type="button" class="bar-btn" onclick="selectOption('role', 'Fakultas', this)">Fakultas</button>
+                    <button type="button" class="bar-btn" onclick="selectOption('role', 'UPBJJ-UT', this)">UPBJJ-UT</button>
+                </div>
+                <input type="hidden" id="reg-role">
+
+                <label style="font-size: 13px; font-weight: 600;">Lokasi</label>
+                <div id="lokasi-bar" style="display: flex; flex-wrap: wrap; gap: 8px; margin: 5px 0 20px 0;">
+                    <button type="button" class="bar-btn" onclick="selectOption('lokasi', 'Jakarta', this)">Jakarta</button>
+                    <button type="button" class="bar-btn" onclick="selectOption('lokasi', 'Semarang', this)">Semarang</button>
+                    <button type="button" class="bar-btn" onclick="selectOption('lokasi', 'Surabaya', this)">Surabaya</button>
+                </div>
+                <input type="hidden" id="reg-lokasi">
+
+                <button type="button" onclick="prosesSimpanRegistrasi()" style="width: 100%; background-color: #0056b3; color: white; border: none; padding: 12px; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 15px;">
+                    Daftar Sekarang
+                </button>
+            </div>
+        `,
+        });
+      }
+
+      function selectOption(type, value, element) {
+        const buttons = element.parentElement.querySelectorAll(".bar-btn");
+        buttons.forEach((btn) => btn.classList.remove("active"));
+
+        element.classList.add("active");
+
+        document.getElementById(`reg-${type}`).value = value;
+      }
+
+      function prosesSimpanRegistrasi() {
+        const nama = document.getElementById("reg-nama").value;
+        const email = document.getElementById("reg-email").value;
+        const password = document.getElementById("reg-pass").value;
+        const role = document.getElementById("reg-role").value;
+        const lokasi = document.getElementById("reg-lokasi").value;
+
+        if (!nama || !email || !password || !role || !lokasi) {
+          Swal.showValidationMessage(
+            "Lengkapi semua data termasuk Role dan Lokasi!",
+          );
+          return;
+        }
+
+        const idOtomatis = Math.floor(Date.now() / 1000);
+
+        const userBaru = {
+          id: idOtomatis,
+          nama: nama,
+          email: email,
+          password: password,
+          role: role,
+          lokasi: lokasi,
+        };
+
+        console.log("Data Berhasil Disimpan:", userBaru);
+
+        Swal.fire({
+          icon: "success",
+          title: "Registrasi Berhasil",
+          text: `ID Anda adalah: ${idOtomatis}. Silakan Login.`,
+          confirmButtonColor: "#0056b3",
+        });
+      }
+    </script>
+  </body>
+</html>

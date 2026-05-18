@@ -1,0 +1,619 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Informasi Stok Bahan Ajar - SITTA UT</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+
+    <link rel="stylesheet" href="css/stok.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    />
+
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  </head>
+  <body>
+    <div id="app">
+      <header class="navbar">
+        <div class="logo-section">
+          <img src="assets/logo_univ.jpeg" @error="onLogoError" alt="Logo UT" />
+          <div class="logo-text">
+            <h1>SITTA</h1>
+            <h2>UNIVERSITAS TERBUKA</h2>
+            <p>Sistem Informasi Tugas Tutorial dan Administrasi</p>
+          </div>
+        </div>
+      </header>
+
+      <main class="container">
+        <div class="page-title">
+          <i class="fas fa-boxes-stacked"></i> Halaman Manajemen Stok Bahan Ajar
+        </div>
+        <section v-if="criticalAlertCount > 0" class="critical-stock-banner">
+          <div class="banner-left-side">
+            <div class="icon-circle-warning">
+              <i class="fas fa-exclamation-triangle animate-pulse"></i>
+            </div>
+            <div class="text-group-alert">
+              <div class="alert-heading">PERINGATAN STOK GUDANG KRITIS</div>
+              <div class="alert-subtext">
+                Terdeteksi {{ criticalAlertCount }} item modul bahan ajar berada
+                di bawah batas safety stock atau kosong!
+              </div>
+            </div>
+          </div>
+          <button class="btn-action-cek" @click="triggerFilterCritical">
+            MINTA RE-ORDER DATA
+          </button>
+        </section>
+
+        <section class="control-card">
+          <div class="filter-grid-layout">
+            <div class="form-control-group">
+              <label
+                ><i class="fas fa-map-marker-alt"></i> UT-Daerah (UPBJJ)</label
+              >
+              <select
+                class="custom-select-input"
+                v-model="filters.selectedUpbjj"
+              >
+                <option value="">-- Tampilkan Semua Wilayah --</option>
+                <option
+                  v-for="area in sharedData.upbjjList"
+                  :key="area"
+                  :value="area"
+                >
+                  {{ area }}
+                </option>
+              </select>
+            </div>
+
+            <div class="form-control-group" v-if="filters.selectedUpbjj">
+              <label><i class="fas fa-tags"></i> Kategori Mata Kuliah</label>
+              <select
+                class="custom-select-input"
+                v-model="filters.selectedKategori"
+              >
+                <option value="">-- Semua Kategori --</option>
+                <option
+                  v-for="cat in sharedData.kategoriList"
+                  :key="cat"
+                  :value="cat"
+                >
+                  {{ cat }}
+                </option>
+              </select>
+            </div>
+
+            <div class="form-control-group">
+              <label
+                ><i class="fas fa-sort-amount-down"></i> Urutkan
+                Berdasarkan</label
+              >
+              <select class="custom-select-input" v-model="filters.sortBy">
+                <option value="judul">Judul Modul (A-Z)</option>
+                <option value="qty">Jumlah Stok</option>
+                <option value="harga">Harga Satuan</option>
+              </select>
+            </div>
+
+            <div class="checkbox-trigger-box" @click="toggleCriticalCheck">
+              <input
+                type="checkbox"
+                id="critical-toggle"
+                v-model="filters.showCriticalOnly"
+                @click.stop
+              />
+              <label for="critical-toggle" style="cursor: pointer"
+                >Butuh Re-Order (Stok &le; Safety)</label
+              >
+            </div>
+          </div>
+
+          <div class="action-btn-row">
+            <button class="btn-secondary-outline" @click="resetFilters">
+              <i class="fas fa-undo"></i> Reset Filter
+            </button>
+            <button class="btn-primary-solid" @click="openAddModal">
+              <i class="fas fa-plus-circle"></i> Tambah Bahan Ajar
+            </button>
+          </div>
+        </section>
+
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>Kode</th>
+                <th>Matakuliah</th>
+                <th>Kategori</th>
+                <th>UT-Daerah</th>
+                <th>Lokasi Rak</th>
+                <th>Harga Pokok</th>
+                <th>Sisa Qty</th>
+                <th>Batas Safety</th>
+                <th>Status Kelayakan</th>
+                <th>Catatan Modul</th>
+                <th>Cover</th>
+                <th style="text-align: center">Aksi</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr
+                v-for="item in displayData"
+                :key="item.kode"
+                :class="{'row-kosong': item.qty === 0, 'row-menipis': item.qty > 0 && item.qty < item.safety, 'row-aman': item.qty >= item.safety}"
+              >
+                <td>
+                  <strong style="color: var(--primary-dark)"
+                    >{{ item.kode }}</strong
+                  >
+                </td>
+
+                <td>{{ item.judul }}</td>
+
+                <td>
+                  <span
+                    style="
+                      background: #ffffff;
+                      border: 1px solid #e2e8f0;
+                      padding: 4px 8px;
+                      border-radius: 6px;
+                      font-size: 12px;
+                      font-weight: 600;
+                      color: #475569;
+                    "
+                    >{{ item.kategori }}</span
+                  >
+                </td>
+                <td><strong>{{ item.upbjj }}</strong></td>
+                <td>
+                  <code
+                    style="
+                      background: #ffffff;
+                      border: 1px solid #e2e8f0;
+                      padding: 3px 6px;
+                      border-radius: 4px;
+                      font-weight: 600;
+                    "
+                    >{{ item.lokasiRak }}</code
+                  >
+                </td>
+                <td style="font-weight: 600">
+                  Rp {{ item.harga.toLocaleString('id-ID') }}
+                </td>
+                <td>
+                  <strong style="font-size: 15px">{{ item.qty }}</strong> unit
+                </td>
+                <td style="color: #64748b">{{ item.safety }} unit</td>
+                <td>
+                  <span v-if="item.qty === 0" class="status-badge kosong">
+                    <i class="fas fa-circle-xmark"></i> Kosong
+                  </span>
+                  <span
+                    v-else-if="item.qty < item.safety"
+                    class="status-badge menipis"
+                  >
+                    <i class="fas fa-triangle-exclamation"></i> Menipis
+                  </span>
+                  <span v-else class="status-badge aman">
+                    <i class="fas fa-circle-check"></i> Aman
+                  </span>
+                </td>
+                <td
+                  v-html="item.catatanHTML || '<span style=\'color:#94a3b8\'>- No log -</span>'"
+                ></td>
+                <td>
+                  <img
+                    :src="'assets/' + item.judul.toLowerCase().replace(/\s+/g, '_') + '.jpg'"
+                    @error="onImageError"
+                    class="book-preview-img"
+                    alt="Cover"
+                  />
+                </td>
+                <td>
+                  <div
+                    class="action-flex-container"
+                    style="justify-content: center"
+                  >
+                    <button
+                      class="icon-action-btn edit"
+                      @click="openEditModal(item)"
+                      title="Edit Stok"
+                    >
+                      <i class="fas fa-pen-to-square"></i>
+                    </button>
+                    <button
+                      class="icon-action-btn delete"
+                      @click="deleteItem(item.kode)"
+                      title="Hapus"
+                    >
+                      <i class="fas fa-trash-can"></i>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+              <tr v-if="displayData.length === 0">
+                <td
+                  colspan="12"
+                  style="text-align: center; padding: 40px; color: #94a3b8"
+                >
+                  <i
+                    class="fas fa-box-open"
+                    style="font-size: 40px; margin-bottom: 10px; display: block"
+                  ></i>
+                  Tidak ada data bahan ajar yang memenuhi kriteria pencarian
+                  Anda.
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </main>
+    </div>
+
+    <script src="js/dataBahanAjar.js"></script>
+
+    <script>
+      const { createApp } = Vue;
+
+      createApp({
+        data() {
+          return {
+            sharedData: dataBahanAjar,
+            stokList: [...dataBahanAjar.stok],
+            filters: {
+              selectedUpbjj: "",
+              selectedKategori: "",
+              sortBy: "judul",
+              showCriticalOnly: false,
+            },
+          };
+        },
+        watch: {
+          "filters.selectedUpbjj"(newVal) {
+            if (!newVal) {
+              this.filters.selectedKategori = "";
+            }
+          },
+        },
+        computed: {
+          displayData() {
+            let filtered = [...this.stokList];
+
+            if (this.filters.selectedUpbjj) {
+              filtered = filtered.filter(
+                (item) =>
+                  item.upbjj.toLowerCase() ===
+                  this.filters.selectedUpbjj.toLowerCase(),
+              );
+            }
+
+            if (this.filters.selectedUpbjj && this.filters.selectedKategori) {
+              filtered = filtered.filter(
+                (item) => item.kategori === this.filters.selectedKategori,
+              );
+            }
+
+            if (this.filters.showCriticalOnly) {
+              filtered = filtered.filter(
+                (item) => item.qty <= item.safety || item.qty === 0,
+              );
+            }
+
+            return filtered.sort((a, b) => {
+              if (
+                this.filters.sortBy === "qty" ||
+                this.filters.sortBy === "harga"
+              ) {
+                return a[this.filters.sortBy] - b[this.filters.sortBy];
+              } else {
+                return a.judul.localeCompare(b.judul);
+              }
+            });
+          },
+          criticalAlertCount() {
+            return this.stokList.filter(
+              (item) => item.qty <= item.safety || item.qty === 0,
+            ).length;
+          },
+        },
+        methods: {
+          toggleCriticalCheck() {
+            this.filters.showCriticalOnly = !this.filters.showCriticalOnly;
+          },
+          triggerFilterCritical() {
+            this.filters.showCriticalOnly = true;
+          },
+          resetFilters() {
+            this.filters.selectedUpbjj = "";
+            this.filters.selectedKategori = "";
+            this.filters.sortBy = "judul";
+            this.filters.showCriticalOnly = false;
+          },
+          onImageError(e) {
+            e.target.src =
+              "https://placehold.co/110x150/e2e8f0/475569?text=No+Cover";
+          },
+          onLogoError(e) {
+            e.target.src =
+              "https://placehold.co/180x60/0056b3/ffffff?text=UNIVERSITAS+TERBUKA";
+          },
+          async openAddModal() {
+            const upbjjOptions = this.sharedData.upbjjList
+              .map((u) => `<option value="${u}">${u}</option>`)
+              .join("");
+            const kategoriOptions = this.sharedData.kategoriList
+              .map((k) => `<option value="${k}">${k}</option>`)
+              .join("");
+
+            const { value: formValues } = await Swal.fire({
+              title: "Tambah Stok Bahan Ajar Baru",
+              html: `
+              <div style="text-align: left; display:flex; flex-direction:column; gap:16px; padding: 10px 5px; font-family:'Inter',sans-serif;">
+                <div style="display:flex; flex-direction:column; gap:6px;">
+                  <label style="font-weight:700; font-size:13px; color:#475569;">Kode Mata Kuliah *</label>
+                  <input id="swal-add-kode" class="swal2-input" style="margin:0; width:100%; box-sizing:border-box; height:42px; font-size:14px;" placeholder="Contoh: MSIM4303">
+                </div>
+                <div style="display:flex; flex-direction:column; gap:6px;">
+                  <label style="font-weight:700; font-size:13px; color:#475569;">Judul Mata Kuliah *</label>
+                  <input id="swal-add-judul" class="swal2-input" style="margin:0; width:100%; box-sizing:border-box; height:42px; font-size:14px;" placeholder="Nama Modul Bahan Ajar">
+                </div>
+                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:12px;">
+                  <div style="display:flex; flex-direction:column; gap:6px;">
+                    <label style="font-weight:700; font-size:13px; color:#475569;">Kategori</label>
+                    <select id="swal-add-kategori" class="swal2-input" style="margin:0; width:100%; box-sizing:border-box; height:42px; font-size:14px; padding:0 10px;">${kategoriOptions}</select>
+                  </div>
+                  <div style="display:flex; flex-direction:column; gap:6px;">
+                    <label style="font-weight:700; font-size:13px; color:#475569;">UT Daerah</label>
+                    <select id="swal-add-upbjj" class="swal2-input" style="margin:0; width:100%; box-sizing:border-box; height:42px; font-size:14px; padding:0 10px;">${upbjjOptions}</select>
+                  </div>
+                </div>
+                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:12px;">
+                  <div style="display:flex; flex-direction:column; gap:6px;">
+                    <label style="font-weight:700; font-size:13px; color:#475569;">Lokasi Rak</label>
+                    <input id="swal-add-rak" class="swal2-input" style="margin:0; width:100%; box-sizing:border-box; height:42px; font-size:14px;" placeholder="Contoh: 0JKT02">
+                  </div>
+                  <div style="display:flex; flex-direction:column; gap:6px;">
+                    <label style="font-weight:700; font-size:13px; color:#475569;">Harga Satuan (Rp)</label>
+                    <input id="swal-add-harga" type="number" class="swal2-input" style="margin:0; width:100%; box-sizing:border-box; height:42px; font-size:14px;" value="50000">
+                  </div>
+                </div>
+                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:12px;">
+                  <div style="display:flex; flex-direction:column; gap:6px;">
+                    <label style="font-weight:700; font-size:13px; color:#475569;">Jumlah Stok (Qty)</label>
+                    <input id="swal-add-qty" type="number" class="swal2-input" style="margin:0; width:100%; box-sizing:border-box; height:42px; font-size:14px;" value="0">
+                  </div>
+                  <div style="display:flex; flex-direction:column; gap:6px;">
+                    <label style="font-weight:700; font-size:13px; color:#475569;">Batas Safety Stock</label>
+                    <input id="swal-add-safety" type="number" class="swal2-input" style="margin:0; width:100%; box-sizing:border-box; height:42px; font-size:14px;" value="10">
+                  </div>
+                </div>
+                <div style="display:flex; flex-direction:column; gap:6px;">
+                  <label style="font-weight:700; font-size:13px; color:#475569;">Catatan (HTML Diizinkan)</label>
+                  <input id="swal-add-catatan" class="swal2-input" style="margin:0; width:100%; box-sizing:border-box; height:42px; font-size:14px;" placeholder="e.g. <em>Edisi Baru</em>">
+                </div>
+              </div>
+            `,
+              focusConfirm: false,
+              showCancelButton: true,
+              confirmButtonText: '<i class="fas fa-save"></i> Simpan Modul',
+              confirmButtonColor: "#2ec4b6",
+              cancelButtonText: "Batal",
+              preConfirm: () => {
+                const kode = document
+                  .getElementById("swal-add-kode")
+                  .value.trim()
+                  .toUpperCase();
+                const judul = document
+                  .getElementById("swal-add-judul")
+                  .value.trim();
+                const harga =
+                  parseInt(document.getElementById("swal-add-harga").value) ||
+                  0;
+                const qty =
+                  parseInt(document.getElementById("swal-add-qty").value) || 0;
+                const safety =
+                  parseInt(document.getElementById("swal-add-safety").value) ||
+                  0;
+
+                if (!kode || !judul) {
+                  Swal.showValidationMessage(
+                    "Kode MK dan Judul Buku wajib diisi!",
+                  );
+                  return false;
+                }
+                if (harga < 0 || qty < 0 || safety < 0) {
+                  Swal.showValidationMessage(
+                    "Angka nominal/stok tidak boleh minus!",
+                  );
+                  return false;
+                }
+
+                return {
+                  kode,
+                  judul,
+                  harga,
+                  qty,
+                  safety,
+                  kategori: document.getElementById("swal-add-kategori").value,
+                  upbjj: document.getElementById("swal-add-upbjj").value,
+                  lokasiRak:
+                    document.getElementById("swal-add-rak").value.trim() ||
+                    "GUDANG-01",
+                  catatanHTML: document
+                    .getElementById("swal-add-catatan")
+                    .value.trim(),
+                };
+              },
+            });
+
+            if (formValues) {
+              if (this.stokList.some((item) => item.kode === formValues.kode)) {
+                Swal.fire(
+                  "Gagal!",
+                  "Kode Mata Kuliah tersebut sudah terdaftar di sistem.",
+                  "error",
+                );
+              } else {
+                this.stokList.push(formValues);
+                Swal.fire(
+                  "Berhasil!",
+                  "Bahan ajar baru berhasil ditambahkan.",
+                  "success",
+                );
+              }
+            }
+          },
+          async openEditModal(item) {
+            const index = this.stokList.findIndex((x) => x.kode === item.kode);
+            const upbjjOptions = this.sharedData.upbjjList
+              .map(
+                (u) =>
+                  `<option value="${u}" ${u === item.upbjj ? "selected" : ""}>${u}</option>`,
+              )
+              .join("");
+            const kategoriOptions = this.sharedData.kategoriList
+              .map(
+                (k) =>
+                  `<option value="${k}" ${k === item.kategori ? "selected" : ""}>${k}</option>`,
+              )
+              .join("");
+
+            const { value: formValues } = await Swal.fire({
+              title: `Edit Modul: ${item.kode}`,
+              html: `
+              <div style="text-align: left; display:flex; flex-direction:column; gap:16px; padding: 10px 5px; font-family:'Inter',sans-serif;">
+                
+                <div style="display:grid; grid-template-columns: 1fr 2fr; gap:12px;">
+                  <div style="display:flex; flex-direction:column; gap:6px;">
+                    <label style="font-weight:700; font-size:13px; color:#475569;">Kode MK *</label>
+                    <input id="swal-edit-kode" class="swal2-input" style="margin:0; width:100%; box-sizing:border-box; height:42px; font-size:14px; background-color: #f1f5f9;" value="${item.kode}" readonly>
+                  </div>
+                  <div style="display:flex; flex-direction:column; gap:6px;">
+                    <label style="font-weight:700; font-size:13px; color:#475569;">Mata Kuliah *</label>
+                    <input id="swal-edit-judul" class="swal2-input" style="margin:0; width:100%; box-sizing:border-box; height:42px; font-size:14px;" value="${item.judul}">
+                  </div>
+                </div>
+
+                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:12px;">
+                  <div style="display:flex; flex-direction:column; gap:6px;">
+                    <label style="font-weight:700; font-size:13px; color:#475569;">Kategori</label>
+                    <select id="swal-edit-kategori" class="swal2-input" style="margin:0; width:100%; box-sizing:border-box; height:42px; font-size:14px; padding:0 10px;">${kategoriOptions}</select>
+                  </div>
+                  <div style="display:flex; flex-direction:column; gap:6px;">
+                    <label style="font-weight:700; font-size:13px; color:#475569;">UT Daerah</label>
+                    <select id="swal-edit-upbjj" class="swal2-input" style="margin:0; width:100%; box-sizing:border-box; height:42px; font-size:14px; padding:0 10px;">${upbjjOptions}</select>
+                  </div>
+                </div>
+                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:12px;">
+                  <div style="display:flex; flex-direction:column; gap:6px;">
+                    <label style="font-weight:700; font-size:13px; color:#475569;">Lokasi Rak</label>
+                    <input id="swal-edit-rak" class="swal2-input" style="margin:0; width:100%; box-sizing:border-box; height:42px; font-size:14px;" value="${item.lokasiRak}">
+                  </div>
+                  <div style="display:flex; flex-direction:column; gap:6px;">
+                    <label style="font-weight:700; font-size:13px; color:#475569;">Harga Satuan (Rp)</label>
+                    <input id="swal-edit-harga" type="number" class="swal2-input" style="margin:0; width:100%; box-sizing:border-box; height:42px; font-size:14px;" value="${item.harga}">
+                  </div>
+                </div>
+                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:12px;">
+                  <div style="display:flex; flex-direction:column; gap:6px;">
+                    <label style="font-weight:700; font-size:13px; color:#475569;">Jumlah Stok (Qty)</label>
+                    <input id="swal-edit-qty" type="number" class="swal2-input" style="margin:0; width:100%; box-sizing:border-box; height:42px; font-size:14px;" value="${item.qty}">
+                  </div>
+                  <div style="display:flex; flex-direction:column; gap:6px;">
+                    <label style="font-weight:700; font-size:13px; color:#475569;">Batas Safety Stock</label>
+                    <input id="swal-edit-safety" type="number" class="swal2-input" style="margin:0; width:100%; box-sizing:border-box; height:42px; font-size:14px;" value="${item.safety || 10}">
+                  </div>
+                </div>
+                <div style="display:flex; flex-direction:column; gap:6px;">
+                  <label style="font-weight:700; font-size:13px; color:#475569;">Catatan (HTML)</label>
+                  <input id="swal-edit-catatan" class="swal2-input" style="margin:0; width:100%; box-sizing:border-box; height:42px; font-size:14px;" value="${item.catatanHTML.replace(/"/g, "&quot;")}">
+                </div>
+              </div>
+            `,
+              focusConfirm: false,
+              showCancelButton: true,
+              confirmButtonText: '<i class="fas fa-edit"></i> Simpan Perubahan',
+              confirmButtonColor: "#ff9f1c",
+              cancelButtonText: "Batal",
+              preConfirm: () => {
+                const judul = document
+                  .getElementById("swal-edit-judul")
+                  .value.trim();
+                const harga =
+                  parseInt(document.getElementById("swal-edit-harga").value) ||
+                  0;
+                const qty =
+                  parseInt(document.getElementById("swal-edit-qty").value) || 0;
+                const safety =
+                  parseInt(document.getElementById("swal-edit-safety").value) ||
+                  0;
+
+                if (!judul) {
+                  Swal.showValidationMessage(
+                    "Judul mata kuliah tidak boleh kosong!",
+                  );
+                  return false;
+                }
+                return {
+                  kode: item.kode,
+                  judul,
+                  harga,
+                  qty,
+                  safety,
+                  kategori: document.getElementById("swal-edit-kategori").value,
+                  upbjj: document.getElementById("swal-edit-upbjj").value,
+                  lokasiRak: document
+                    .getElementById("swal-edit-rak")
+                    .value.trim(),
+                  catatanHTML: document
+                    .getElementById("swal-edit-catatan")
+                    .value.trim(),
+                };
+              },
+            });
+
+            if (formValues) {
+              this.stokList[index] = formValues;
+              Swal.fire(
+                "Berhasil!",
+                "Data stok bahan ajar diperbarui.",
+                "success",
+              );
+            }
+          },
+          deleteItem(kode) {
+            Swal.fire({
+              title: "Hapus Data?",
+              text: `Data Modul dengan kode ${kode} akan dihapus permanen.`,
+              icon: "warning",
+              showCancelButton: true,
+              confirmButtonColor: "#e71d36",
+              cancelButtonColor: "#6c757d",
+              confirmButtonText: "Ya, Hapus!",
+            }).then((result) => {
+              if (result.isConfirmed) {
+                this.stokList = this.stokList.filter((x) => x.kode !== kode);
+                Swal.fire(
+                  "Terhapus!",
+                  "Data berhasil dibersihkan dari sistem.",
+                  "success",
+                );
+              }
+            });
+          },
+        },
+      }).mount("#app");
+    </script>
+  </body>
+</html>

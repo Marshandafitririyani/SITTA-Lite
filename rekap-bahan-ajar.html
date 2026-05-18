@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Rekap Bahan Ajar - SITTA UT</title>
+    <link rel="stylesheet" href="css/rekap-bahan-ajar.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    />
+  </head>
+  <body>
+    <nav class="navbar">
+      <header class="navbar">
+        <div class="logo-section">
+          <img src="assets/logo_univ.jpeg" alt="Logo UT" />
+          <div class="logo-text">
+            <h1>SITTA</h1>
+            <h2>UNIVERSITAS TERBUKA</h2>
+            <p>Sistem Informasi Tugas Tutorial dan Administrasi</p>
+          </div>
+        </div>
+      </header>
+    </nav>
+
+    <div class="container">
+      <header class="header-section">
+        <div class="title-group">
+          <h1><i class="fas fa-chart-pie"></i> Rekapitulasi Bahan Ajar</h1>
+          <p>Statistik ketersediaan dan distribusi buku semester ini</p>
+        </div>
+        <div class="header-actions">
+          <select class="select-semester">
+            <option>Semester 2026/26.1</option>
+            <option>Semester 2025/25.2</option>
+            <option>Semester 2024/24.2</option>
+            <option>Semester 2023/23.1</option>
+          </select>
+        </div>
+      </header>
+
+      <div class="rekap-stats-grid">
+        <div class="stat-tile">
+          <div class="tile-icon blue"><i class="fas fa-layer-group"></i></div>
+          <div class="tile-content">
+            <span class="tile-label">Total Judul Buku</span>
+            <span class="tile-number">1,240</span>
+          </div>
+        </div>
+        <div class="stat-tile">
+          <div class="tile-icon green"><i class="fas fa-check-double"></i></div>
+          <div class="tile-content">
+            <span class="tile-label">Stok Tersedia</span>
+            <span class="tile-number">85,200</span>
+          </div>
+        </div>
+        <div class="stat-tile">
+          <div class="tile-icon orange">
+            <i class="fas fa-exclamation-circle"></i>
+          </div>
+          <div class="tile-content">
+            <span class="tile-label">Stok Kritis</span>
+            <span class="tile-number">12</span>
+          </div>
+        </div>
+        <div class="stat-tile">
+          <div class="tile-icon red"><i class="fas fa-times-circle"></i></div>
+          <div class="tile-content">
+            <span class="tile-label">Stok Kosong</span>
+            <span class="tile-number">3</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="rekap-main-content">
+        <div class="chart-container">
+          <div class="chart-header">
+            <h3>Sebaran Stok Per Kategori</h3>
+          </div>
+          <div class="category-bars">
+            <div class="bar-item">
+              <div class="bar-info">
+                <span>BMP (Buku Materi Pokok)</span> <span>65%</span>
+              </div>
+              <div class="bar-track">
+                <div class="bar-fill blue" style="width: 65%"></div>
+              </div>
+            </div>
+            <div class="bar-item">
+              <div class="bar-info"><span>MKDU</span> <span>20%</span></div>
+              <div class="bar-track">
+                <div class="bar-fill green" style="width: 20%"></div>
+              </div>
+            </div>
+            <div class="bar-item">
+              <div class="bar-info">
+                <span>Modul Praktikum</span> <span>10%</span>
+              </div>
+              <div class="bar-track">
+                <div class="bar-fill orange" style="width: 10%"></div>
+              </div>
+            </div>
+            <div class="bar-item">
+              <div class="bar-info"><span>Lainnya</span> <span>5%</span></div>
+              <div class="bar-track">
+                <div class="bar-fill grey" style="width: 5%"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="critical-list">
+          <div class="chart-header">
+            <h3>Peringatan Stok Kritis</h3>
+          </div>
+          <ul class="critical-items">
+            <li>
+              <span class="code">MKDU4110</span>
+              <span class="name">Pendidikan Pancasila</span>
+              <span class="stock-badge low">Sisa: 10</span>
+            </li>
+            <li>
+              <span class="code">ADBI4201</span>
+              <span class="name">Manajemen Pemasaran</span>
+              <span class="stock-badge empty">Sisa: 0</span>
+            </li>
+            <li>
+              <span class="code">MSIM4302</span>
+              <span class="name">Sistem Informasi Manajemen</span>
+              <span class="stock-badge low">Sisa: 25</span>
+            </li>
+          </ul>
+          <button class="btn-full">
+            Lihat Semua Stok <i class="fas fa-arrow-right"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

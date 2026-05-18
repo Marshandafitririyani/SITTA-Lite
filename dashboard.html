@@ -1,0 +1,421 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SITTA UT Dashboard</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    />
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+
+    <link rel="stylesheet" href="css/dashboard.css" />
+
+    <style>
+      [v-cloak] {
+        display: none;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div id="app" v-cloak>
+      <header class="navbar">
+        <div class="logo-section">
+          <img src="assets/logo_univ.jpeg" alt="Logo UT" />
+          <div class="logo-text">
+            <h1>SITTA</h1>
+            <h2>UNIVERSITAS TERBUKA</h2>
+            <p>Sistem Informasi Tugas Tutorial dan Administrasi</p>
+          </div>
+        </div>
+
+        <div class="user-section">
+          <div class="user-info"></div>
+          <button class="btn-logout" @click="konfirmasiLogout">Logout</button>
+        </div>
+      </header>
+
+      <main class="container">
+        <section class="welcome-banner">
+          <h2>Selamat Datang di SITTA</h2>
+          <p>
+            Sistem Informasi Tugas Tutorial dan Administrasi Universitas Terbuka
+          </p>
+        </section>
+
+        <section class="middle-grid-layout">
+          <div class="card-panel">
+            <h4><i class="fa-solid fa-id-card"></i> Data Mahasiswa</h4>
+            <div class="mahasiswa-wrapper">
+              <div class="user-meta-info">
+                <div class="avatar-circle-blue">
+                  <i class="fa-solid fa-user-gear"></i>
+                </div>
+                <div>
+                  <h5>{{ user.nama }}</h5>
+                  <a :href="'mailto:' + user.email" class="mail"
+                    >{{ user.email }}</a
+                  >
+                </div>
+              </div>
+
+              <div class="info-field-box">
+                <div class="field-item">
+                  <label>NIM</label>
+                  <input type="text" :value="user.nim" readonly />
+                </div>
+                <div class="field-item">
+                  <label>Lokasi</label>
+                  <select disabled>
+                    <option>{{ user.lokasi }}</option>
+                  </select>
+                </div>
+              </div>
+              <div class="field-item">
+                <label>Role</label>
+                <input type="text" :value="user.role" readonly />
+              </div>
+
+              <button
+                class="btn-profile-trigger"
+                @click="notifFitur('Profil Admin')"
+              >
+                <i class="fa-solid fa-magnifying-glass"></i> Lihat Detail
+              </button>
+            </div>
+          </div>
+
+          <div class="card-panel right-content-flex">
+            <div class="minimalist-time-header">
+              <div class="greet-text-side">
+                <h3>{{ liveGreeting }}, {{ user.nama }}</h3>
+                <p>{{ liveDate }} • {{ liveTime }} • SITTA</p>
+              </div>
+              <div class="theme-indicator-box">
+                <i :class="liveIcon"></i>
+              </div>
+            </div>
+
+            <div class="log-container">
+              <div class="log-row-item">
+                <div class="log-arrow-box arrow-orange">
+                  <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                </div>
+                <div class="log-text-details">
+                  <h6>Pengantar Ilmu Komunikasi (SKOM4101)</h6>
+                  <p>2025-08-26 09:15 • Siti Marlina</p>
+                </div>
+                <div class="log-status-right">
+                  <div class="log-qty-val qty-orange">-50</div>
+                  <span class="log-location-badge">0JKT01</span>
+                </div>
+              </div>
+
+              <div class="log-row-item">
+                <div class="log-arrow-box arrow-orange">
+                  <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                </div>
+                <div class="log-text-details">
+                  <h6>Manajemen Keuangan (EKMA4213)</h6>
+                  <p>2025-08-25 14:30 • Doni Setiawan</p>
+                </div>
+                <div class="log-status-right">
+                  <div class="log-qty-val qty-orange">-120</div>
+                  <span class="log-location-badge">0JKT01</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="critical-stock-banner" v-if="!isGudangAman">
+          <div class="banner-left-side">
+            <div class="icon-circle-warning">
+              <i class="fa-solid fa-triangle-exclamation animate-pulse"></i>
+            </div>
+            <div class="text-group-alert">
+              <div class="alert-heading">PERINGATAN STOK KRITIS</div>
+              <div class="alert-subtext">
+                {{ bukuKosongCount }} buku kosong & {{ bukuKritisCount }} buku
+                di bawah safety stock.
+              </div>
+            </div>
+          </div>
+
+          <button class="btn-action-cek" @click="keStok">
+            CEK DETAIL STOK
+          </button>
+        </section>
+      </main>
+
+      <main class="container" style="margin-top: 0">
+        <section class="bottom-navigation-grid">
+          <a href="stok.html" class="nav-card-box">
+            <div class="card-top-row">
+              <div class="icon-circle-indicator color-blue">
+                <i class="fa-solid fa-box-open"></i>
+              </div>
+              <span class="badge-count"
+                >{{ totalStokQty.toLocaleString('id-ID') }} QTY</span
+              >
+            </div>
+            <div class="card-bottom-row">
+              <h5>STOK BAHAN AJAR</h5>
+              <p>Cek stok ketersediaan modul</p>
+              <div class="card-footer-trigger">
+                Kelola <i class="fa-solid fa-angle-right"></i>
+              </div>
+            </div>
+          </a>
+
+          <a href="tracking.html" class="nav-card-box">
+            <div class="card-top-row">
+              <div class="icon-circle-indicator color-green">
+                <i class="fa-solid fa-truck-fast"></i>
+              </div>
+              <span class="badge-count">{{ totalTrackingAktif }} AKTIF</span>
+            </div>
+            <div class="card-bottom-row">
+              <h5>TRACKING PENGIRIMAN</h5>
+              <p>Lacak status Delivery Order</p>
+              <div class="card-footer-trigger">
+                KELOLA DATA <i class="fa-solid fa-angle-right"></i>
+              </div>
+            </div>
+          </a>
+
+          <a
+            href="#"
+            @click.prevent="notifFitur('Histori Transaksi')"
+            class="nav-card-box"
+          >
+            <div class="card-top-row">
+              <div class="icon-circle-indicator color-magenta">
+                <i class="fa-solid fa-clock-rotate-left"></i>
+              </div>
+              <span class="badge-count">5 LOG</span>
+            </div>
+            <div class="card-bottom-row">
+              <h5>HISTORI TRANSAKSI</h5>
+              <p>Catatan pesanan terdahulu</p>
+              <div class="card-footer-trigger">
+                Buka <i class="fa-solid fa-angle-right"></i>
+              </div>
+            </div>
+          </a>
+        </section>
+
+        <div class="menu-grid">
+          <div class="card">
+            <i class="fas fa-book"></i>
+            <h3>Informasi Bahan Ajar</h3>
+            <p>Lihat informasi dan ketersediaan bahan ajar</p>
+            <button
+              type="button"
+              class="btn-akses"
+              onclick="window.location.href = 'stok.html'"
+            >
+              Akses
+            </button>
+          </div>
+
+          <div class="card">
+            <i class="fas fa-truck"></i>
+            <h3>Tracking Pengiriman</h3>
+            <p>Lacak status pengiriman bahan ajar</p>
+            <button
+              type="button"
+              class="btn-akses"
+              onclick="window.location.href = 'tracking.html'"
+            >
+              Akses
+            </button>
+          </div>
+
+          <div class="card">
+            <i class="fas fa-chart-bar"></i>
+            <h3>Laporan</h3>
+            <p>Lihat laporan pemesanan dan pengiriman</p>
+            <button
+              type="button"
+              class="btn-akses"
+              onclick="window.location.href = 'laporan.html'"
+            >
+              Akses
+            </button>
+          </div>
+
+          <div class="card">
+            <i class="fas fa-line-chart"></i>
+            <h3>Monitoring Progress DO</h3>
+            <p>Pantau progress delivery order</p>
+            <button
+              type="button"
+              class="btn-akses"
+              onclick="window.location.href = 'monitoring.html'"
+            >
+              Akses
+            </button>
+          </div>
+
+          <div class="card">
+            <i class="fas fa-clipboard-list"></i>
+            <h3>Rekap Bahan Ajar</h3>
+            <p>Rekapitulasi bahan ajar</p>
+            <button
+              type="button"
+              class="btn-akses"
+              onclick="window.location.href = 'rekap-bahan-ajar.html'"
+            >
+              Akses
+            </button>
+          </div>
+
+          <div class="card">
+            <i class="fas fa-history"></i>
+            <h3>Histori Transaksi</h3>
+            <p>Riwayat transaksi bahan ajar</p>
+            <button
+              type="button"
+              class="btn-akses"
+              onclick="window.location.href = 'histori-transaksi.html'"
+            >
+              Akses
+            </button>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <script src="js/dataBahanAjar.js"></script>
+
+    <script>
+      const { createApp } = Vue;
+
+      createApp({
+        data() {
+          return {
+            user: {
+              nama: "Nama Pengguna",
+              email: "Admin@ut.ac.id",
+              nim: "041234567",
+              lokasi: "UT Pusat",
+              role: "Administrator Utama",
+            },
+            liveGreeting: "Memuat salam...",
+            liveDate: "",
+            liveTime: "",
+            liveIcon: "fa-solid fa-sun",
+
+            daftarStok:
+              typeof dataBahanAjar !== "undefined" && dataBahanAjar.stok
+                ? dataBahanAjar.stok
+                : [],
+            daftarTracking:
+              typeof dataBahanAjar !== "undefined" && dataBahanAjar.tracking
+                ? dataBahanAjar.tracking
+                : {},
+          };
+        },
+        computed: {
+          bukuKosongCount() {
+            return this.daftarStok.filter((item) => item.qty === 0).length;
+          },
+          bukuKritisCount() {
+            return this.daftarStok.filter(
+              (item) => item.qty > 0 && item.qty < item.safety,
+            ).length;
+          },
+          isGudangAman() {
+            return this.bukuKosongCount === 0 && this.bukuKritisCount === 0;
+          },
+          totalStokQty() {
+            return this.daftarStok.reduce((total, item) => total + item.qty, 0);
+          },
+          totalTrackingAktif() {
+            return Object.keys(this.daftarTracking).length;
+          },
+        },
+        mounted() {
+          this.cekSesiLogin();
+          this.updateWaktuOtomatis();
+          setInterval(this.updateWaktuOtomatis, 1000);
+        },
+        methods: {
+          cekSesiLogin() {
+            const dataSesi = localStorage.getItem("userLoggedIn");
+            if (dataSesi) {
+              const userTerlogin = JSON.parse(dataSesi);
+              this.user.nama = userTerlogin.nama || this.user.nama;
+              this.user.role = userTerlogin.role || this.user.role;
+              this.user.email = userTerlogin.email || this.user.email;
+              this.user.nim = userTerlogin.nim || this.user.nim;
+              this.user.lokasi = userTerlogin.lokasi || this.user.lokasi;
+            } else {
+              window.location.href = "index.html";
+            }
+          },
+          updateWaktuOtomatis() {
+            const sekarang = new Date();
+            const jam = (Thermal = sekarang.getHours());
+
+            if (jam >= 5 && jam < 11) {
+              this.liveGreeting = "Selamat Pagi";
+              this.liveIcon = "fa-solid fa-cloud-sun";
+            } else if (jam >= 11 && jam < 15) {
+              this.liveGreeting = "Selamat Siang";
+              this.liveIcon = "fa-solid fa-sun";
+            } else if (jam >= 15 && jam < 18) {
+              this.liveGreeting = "Selamat Sore";
+              this.liveIcon = "fa-solid fa-cloud-moon";
+            } else {
+              this.liveGreeting = "Selamat Malam";
+              this.liveIcon = "fa-solid fa-moon";
+            }
+
+            const opsiHari = {
+              weekday: "long",
+              year: "numeric",
+              month: "long",
+              day: "numeric",
+            };
+            this.liveDate = sekarang.toLocaleDateString("id-ID", opsiHari);
+
+            this.liveTime = Thermal = sekarang.toLocaleTimeString("id-ID", {
+              hour: "2-digit",
+              minute: "2-digit",
+              second: "2-digit",
+            });
+          },
+          konfirmasiLogout() {
+            Swal.fire({
+              title: "Apakah Anda yakin ingin Logout?",
+              text: "Sesi Anda akan berakhir.",
+              icon: "warning",
+              showCancelButton: true,
+              confirmButtonColor: "#0056b3",
+              cancelButtonColor: "#d33",
+              confirmButtonText: "Ya, Logout!",
+              cancelButtonText: "Batal",
+            }).then((result) => {
+              if (result.isConfirmed) {
+                localStorage.removeItem("userLoggedIn");
+                window.location.href = "index.html";
+              }
+            });
+          },
+          notifFitur(fitur) {
+            Swal.fire("Informasi", `Membuka modul ${fitur}`, "info");
+          },
+          keStok() {
+            window.location.href = "stok.html";
+          },
+        },
+      }).mount("#app");
+    </script>
+  </body>
+</html>
